@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/ic_baseline_home_24"
+        android:title="Inicio"/>
+
+    <item android:title="Categoría">
+        <menu>
+            <item
+                android:id="@+id/nav_water"
+                android:icon="@drawable/ic_baseline_water_24"
+                android:title="Agua"/>
+
+            <item
+                android:id="@+id/nav_air"
+                android:icon="@drawable/ic_baseline_air_24"
+                android:title="Aire"/>
+
+            <item
+                android:id="@+id/nav_green"
+                android:icon="@drawable/ic_baseline_eco_24"
+                android:title="Áreas verdes"/>
+        </menu>
+    </item>
+
+    <item android:title="Opciones">
+        <menu>
+            <item
+                android:id="@+id/nav_info"
+                android:icon="@drawable/ic_baseline_info_24"
+                android:title="Acerca de"/>
+
+            <item
+                android:id="@+id/nav_settings"
+                android:icon="@drawable/ic_baseline_settings_24"
+                android:title="Configuración"/>
+
+            <item
+                android:id="@+id/nav_contact"
+                android:icon="@drawable/ic_baseline_contact_support_24"
+                android:title="Contacto"/>
+        </menu>
+    </item>
+
+    <item android:title="Apóyanos">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_baseline_share_24"
+                android:title="Comparte"/>
+
+            <item
+                android:id="@+id/nav_rate"
+                android:icon="@drawable/ic_baseline_rate_review_24"
+                android:title="Califícanos"/>
+        </menu>
+    </item>
+
+</menu>
