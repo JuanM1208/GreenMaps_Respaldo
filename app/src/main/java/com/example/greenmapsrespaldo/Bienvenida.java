@@ -117,7 +117,9 @@ public class Bienvenida extends AppCompatActivity {
 
                     //Revisa si el email es verificado antes de que el usuario pueda acceder a su perfil
                     //if (firebaseUser.isEmailVerified()){
-                        Toast.makeText(Bienvenida.this, "Has iniciado sesión", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Bienvenida.this, "Has iniciado sesión", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(Bienvenida.this, MainActivity.class));
+                    finish();
                     /*}
                     else {
                         firebaseUser.sendEmailVerification();
@@ -178,10 +180,8 @@ public class Bienvenida extends AppCompatActivity {
         super.onStart();
         if (authProfile.getCurrentUser() != null){
             Toast.makeText(Bienvenida.this, "Ya habías iniciado sesión", Toast.LENGTH_SHORT).show();
-
-            /*//Inicia el Activity del perfil de usuario
-            startActivity(new Intent(Login.this, PerfilUsuario.class));
-            finish();       //Cierra el login*/
+            startActivity(new Intent(Bienvenida.this, MainActivity.class));
+            finish();
         }
         else {
             Toast.makeText(Bienvenida.this, "Ya puedes iniciar sesión", Toast.LENGTH_SHORT).show();

@@ -9,6 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GreenMapsRespaldo">
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyC4__FjDqqNqgg9uL9Gh5ykcrN4kjTWd5o" />
         <activity android:name=".MainActivity2"></activity>
         <activity
             android:name=".Bienvenida"
