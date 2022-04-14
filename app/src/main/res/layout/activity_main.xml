@@ -37,9 +37,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignEnd="@id/map"
-            android:layout_alignBottom="@id/map"
+            android:layout_alignTop="@id/map"
             android:layout_marginRight="30px"
-            android:layout_marginBottom="330px"/>
+            android:layout_marginTop="180px"
+            android:src="@drawable/ic_location"/>
 
     </RelativeLayout>
 

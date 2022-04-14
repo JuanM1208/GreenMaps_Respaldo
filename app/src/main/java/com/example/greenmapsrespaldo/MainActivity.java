@@ -12,6 +12,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
@@ -34,6 +35,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -144,17 +147,17 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (providerEnable){
             return true;
         } else {
-            AlertDialog alertDialog = new AlertDialog.Builder(this)
-                    .setTitle("Permiso de GPS")
-                    .setMessage("Esta app necesita el GPS para funcionar. Por favor habilite el GPS")
-                    .setPositiveButton("Ok", ((dialogInterface, i) -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle("Permiso de GPS");
+                    builder.setMessage("Esta app necesita el GPS para funcionar. Por favor habilite el GPS");
+                    builder.setPositiveButton("Ok", ((dialogInterface, i) -> {
                         Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                         startActivityForResult(intent, GPS_REQUEST_CODE);
-                    }))
-                    .setCancelable(false)
-                    .show();
+                    }));
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.setCancelable(false);
+                    alertDialog.show();
         }
-
         return false;
     }
 
@@ -206,13 +209,94 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap = googleMap;
         mMap.setMyLocationEnabled(true);
 
-        // Add a marker in Sydney and move the camera
-        /*LatLng gdl = new LatLng(20.6736, -103.344);
-        mMap.addMarker(new MarkerOptions()
+        //Zonas de calidad del aire
+        Circle atemajac = mMap.addCircle(new CircleOptions()
+                .center(new LatLng(20.719431295977163, -103.35580117535605))
+                .radius(1200)
+                .strokeWidth(5)
+                .strokeColor(Color.GRAY)
+                .fillColor(Color.argb(128, 192, 192, 192))
+        );
+
+        Circle oblatos = mMap.addCircle(new CircleOptions()
+                .center(new LatLng(20.697645069101288, -103.29581775695488))
+                .radius(1200)
+                .strokeWidth(5)
+                .strokeColor(Color.GRAY)
+                .fillColor(Color.argb(128, 192, 192, 192))
+        );
+
+        Circle vallarta = mMap.addCircle(new CircleOptions()
+                .center(new LatLng(20.678608, -103.399396))
+                .radius(1200)
+                .strokeWidth(5)
+                .strokeColor(Color.GRAY)
+                .fillColor(Color.argb(128, 192, 192, 192))
+        );
+
+        Circle centro = mMap.addCircle(new CircleOptions()
+                .center(new LatLng(20.672422131856187, -103.3332153993359))
+                .radius(1200)
+                .strokeWidth(5)
+                .strokeColor(Color.GRAY)
+                .fillColor(Color.argb(128, 192, 192, 192))
+        );
+
+        Circle tlaquepaque = mMap.addCircle(new CircleOptions()
+                .center(new LatLng(20.639333297236206, -103.31312905549588))
+                .radius(1200)
+                .strokeWidth(5)
+                .strokeColor(Color.GRAY)
+                .fillColor(Color.argb(128, 192, 192, 192))
+        );
+
+        Circle lomaDorada = mMap.addCircle(new CircleOptions()
+                .center(new LatLng(20.627740376622047, -103.26409837363586))
+                .radius(1200)
+                .strokeWidth(5)
+                .strokeColor(Color.GRAY)
+                .fillColor(Color.argb(128, 192, 192, 192))
+        );
+
+        Circle aguilas = mMap.addCircle(new CircleOptions()
+                .center(new LatLng(20.630096526853336, -103.4167356924431))
+                .radius(1200)
+                .strokeWidth(5)
+                .strokeColor(Color.GRAY)
+                .fillColor(Color.argb(128, 192, 192, 192))
+        );
+
+        Circle miravalle = mMap.addCircle(new CircleOptions()
+                .center(new LatLng(20.612687160151275, -103.34339308333261))
+                .radius(1200)
+                .strokeWidth(5)
+                .strokeColor(Color.GRAY)
+                .fillColor(Color.argb(128, 192, 192, 192))
+        );
+
+        Circle lasPintas = mMap.addCircle(new CircleOptions()
+                .center(new LatLng(20.57678391504256, -103.32647964788045))
+                .radius(1200)
+                .strokeWidth(5)
+                .strokeColor(Color.GRAY)
+                .fillColor(Color.argb(128, 192, 192, 192))
+        );
+
+        Circle santaFe = mMap.addCircle(new CircleOptions()
+                .center(new LatLng(20.52919926636695, -103.37719039248793))
+                .radius(1200)
+                .strokeWidth(5)
+                .strokeColor(Color.GRAY)
+                .fillColor(Color.argb(128, 192, 192, 192))
+        );
+
+        // Add a marker in Gdl and move the camera
+        LatLng gdl = new LatLng(20.6736, -103.344);
+        /*mMap.addMarker(new MarkerOptions()
                 .position(gdl)
-                .title("Marker in Sydney"));
+                .title("Marker in Sydney"));*/
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(gdl, 11));
-        mMap.getUiSettings().setCompassEnabled(true);*/
+        mMap.getUiSettings().setCompassEnabled(true);
         mMap.getUiSettings().setZoomControlsEnabled(true);
     }
 
