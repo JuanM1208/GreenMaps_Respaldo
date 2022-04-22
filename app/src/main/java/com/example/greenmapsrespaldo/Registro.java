@@ -60,7 +60,6 @@ public class Registro extends AppCompatActivity {
                 String txtPassword = etPassword.getText().toString();
                 String txtConfirmPassword = etConfirmPassword.getText().toString();
 
-
                 String mobileRegex = "[6-9][0-9]{9}";
                 Matcher mobileMatcher;
                 Pattern mobilePattern = Pattern.compile(mobileRegex);

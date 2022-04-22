@@ -58,6 +58,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     FloatingActionButton fab;
     private FusedLocationProviderClient mLocationClient;
     private int GPS_REQUEST_CODE = 9001;
+    private AlertDialog.Builder dialogBuilder;
+    private AlertDialog dialog;
 
     int flagAire = 0;
     int flagAgua = 0;
@@ -85,9 +87,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             .strokeColor(Color.GREEN)
             .fillColor(Color.argb(128, 182, 255, 0));
 
-        Circle rSantiago, rVerde, lagCaj; //Cuerpos de agua
-        Circle atemajac, oblatos, vallarta, centro, tlaquepaque, lomaDorada, aguilas, miravalle, lasPintas, santaFe; //Puntos de aire
-        Circle pMetro, bColomos, bPrimavera, pGonzGallo, pSoli, pSanRafa, cerroReina, pAlcalde, pAguaAzul, zoo, barranca, pMorelos, pAvilaC, country, pSanJacinto, bCentinela, pMontenegro; //Areas verdes
+    Circle rSantiago, rVerde, lagCaj; //Cuerpos de agua
+    Circle atemajac, oblatos, vallarta, centro, tlaquepaque, lomaDorada, aguilas, miravalle, lasPintas, santaFe; //Puntos de aire
+    Circle pMetro, bColomos, bPrimavera, pGonzGallo, pSoli, pSanRafa, cerroReina, pAlcalde, pAguaAzul, zoo, barranca, pMorelos, pAvilaC, country, pSanJacinto, bCentinela, pMontenegro; //Areas verdes
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,38 +134,20 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     case R.id.nav_water:
                         Toast.makeText(MainActivity.this, "Agua", Toast.LENGTH_SHORT).show();
 
+                        if (flagAgua == 1) {
+                            break;
+                        }
+
                         if (flagAire == 1){
-                            atemajac.setVisible(false);
-                            oblatos.setVisible(false);
-                            vallarta.setVisible(false);
-                            centro.setVisible(false);
-                            tlaquepaque.setVisible(false);
-                            lomaDorada.setVisible(false);
-                            aguilas.setVisible(false);
-                            miravalle.setVisible(false);
-                            lasPintas.setVisible(false);
-                            santaFe.setVisible(false);
+                            atemajac.setVisible(false); oblatos.setVisible(false); vallarta.setVisible(false); centro.setVisible(false); tlaquepaque.setVisible(false);
+                            lomaDorada.setVisible(false); aguilas.setVisible(false); miravalle.setVisible(false); lasPintas.setVisible(false); santaFe.setVisible(false);
                             flagAire = 0;
                         }
 
                         if (flagVerde == 1){
-                            pMetro.setVisible(false);
-                            bColomos.setVisible(false);
-                            bPrimavera.setVisible(false);
-                            pGonzGallo.setVisible(false);
-                            pSoli.setVisible(false);
-                            pSanRafa.setVisible(false);
-                            cerroReina.setVisible(false);
-                            pAlcalde.setVisible(false);
-                            pAguaAzul.setVisible(false);
-                            zoo.setVisible(false);
-                            barranca.setVisible(false);
-                            pMorelos.setVisible(false);
-                            pAvilaC.setVisible(false);
-                            country.setVisible(false);
-                            pSanJacinto.setVisible(false);
-                            bCentinela.setVisible(false);
-                            pMontenegro.setVisible(false);
+                            pMetro.setVisible(false); bColomos.setVisible(false); bPrimavera.setVisible(false); pGonzGallo.setVisible(false); pSoli.setVisible(false); pSanRafa.setVisible(false);
+                            cerroReina.setVisible(false); pAlcalde.setVisible(false); pAguaAzul.setVisible(false); zoo.setVisible(false); barranca.setVisible(false); pMorelos.setVisible(false);
+                            pAvilaC.setVisible(false); country.setVisible(false); pSanJacinto.setVisible(false); bCentinela.setVisible(false); pMontenegro.setVisible(false);
                             flagVerde = 0;
                         }
 
@@ -172,44 +156,46 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         rSantiago = mMap.addCircle(agua);
                         rSantiago.setCenter(new LatLng(20.74588387632154, -103.30451464376783));
                         rSantiago.setVisible(true);
+                        rSantiago.setClickable(true);
 
                         rVerde = mMap.addCircle(agua);
                         rVerde.setCenter(new LatLng(20.71947382618508, -103.25119267170733));
                         rVerde.setVisible(true);
+                        rVerde.setClickable(true);
 
                         lagCaj = mMap.addCircle(agua);
                         lagCaj.setCenter(new LatLng(20.41854716110271, -103.32117624041832));
                         lagCaj.setVisible(true);
+                        lagCaj.setClickable(true);
+
+                        mMap.setOnCircleClickListener(new GoogleMap.OnCircleClickListener() {
+                            @Override
+                            public void onCircleClick(@NonNull Circle circle) {
+                                dialogBuilder = new AlertDialog.Builder(MainActivity.this);
+                                final View popupView = getLayoutInflater().inflate(R.layout.popup_agua, null);
+                                dialogBuilder.setView(popupView);
+                                dialog = dialogBuilder.create();
+                                dialog.show();
+                            }
+                        });
 
                         break;
                     case R.id.nav_air:
                         Toast.makeText(MainActivity.this, "Aire", Toast.LENGTH_SHORT).show();
 
                         if (flagAgua == 1) {
-                            rSantiago.setVisible(false);
-                            rVerde.setVisible(false);
-                            lagCaj.setVisible(false);
+                            rSantiago.setVisible(false); rVerde.setVisible(false); lagCaj.setVisible(false);
                             flagAgua = 0;
                         }
 
+                        if (flagAire == 1){
+                            break;
+                        }
+
                         if (flagVerde == 1){
-                            pMetro.setVisible(false);
-                            bColomos.setVisible(false);
-                            bPrimavera.setVisible(false);
-                            pGonzGallo.setVisible(false);
-                            pSoli.setVisible(false);
-                            pSanRafa.setVisible(false);
-                            cerroReina.setVisible(false);
-                            pAlcalde.setVisible(false);
-                            pAguaAzul.setVisible(false);
-                            zoo.setVisible(false);
-                            barranca.setVisible(false);
-                            pMorelos.setVisible(false);
-                            pAvilaC.setVisible(false);
-                            country.setVisible(false);
-                            pSanJacinto.setVisible(false);
-                            bCentinela.setVisible(false);
-                            pMontenegro.setVisible(false);
+                            pMetro.setVisible(false); bColomos.setVisible(false); bPrimavera.setVisible(false); pGonzGallo.setVisible(false); pSoli.setVisible(false); pSanRafa.setVisible(false);
+                            cerroReina.setVisible(false); pAlcalde.setVisible(false); pAguaAzul.setVisible(false); zoo.setVisible(false); barranca.setVisible(false); pMorelos.setVisible(false);
+                            pAvilaC.setVisible(false); country.setVisible(false); pSanJacinto.setVisible(false); bCentinela.setVisible(false); pMontenegro.setVisible(false);
                             flagVerde = 0;
                         }
 
@@ -218,66 +204,81 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         atemajac = mMap.addCircle(aire);
                         atemajac.setCenter(new LatLng(20.719431295977163, -103.35580117535605));
                         atemajac.setVisible(true);
+                        atemajac.setClickable(true);
 
                         oblatos = mMap.addCircle(aire);
                         oblatos.setCenter(new LatLng(20.697645069101288, -103.29581775695488));
                         oblatos.setVisible(true);
+                        oblatos.setClickable(true);
 
                         vallarta = mMap.addCircle(aire);
                         vallarta.setCenter(new LatLng(20.678608, -103.399396));
                         vallarta.setVisible(true);
+                        vallarta.setClickable(true);
 
                         centro = mMap.addCircle(aire);
                         centro.setCenter(new LatLng(20.672422131856187, -103.3332153993359));
                         centro.setVisible(true);
+                        centro.setClickable(true);
 
                         tlaquepaque = mMap.addCircle(aire);
                         tlaquepaque.setCenter(new LatLng(20.639333297236206, -103.31312905549588));
                         tlaquepaque.setVisible(true);
+                        tlaquepaque.setClickable(true);
 
                         lomaDorada = mMap.addCircle(aire);
                         lomaDorada.setCenter(new LatLng(20.627740376622047, -103.26409837363586));
                         lomaDorada.setVisible(true);
+                        lomaDorada.setClickable(true);
 
                         aguilas = mMap.addCircle(aire);
                         aguilas.setCenter(new LatLng(20.630096526853336, -103.4167356924431));
                         aguilas.setVisible(true);
+                        aguilas.setClickable(true);
 
                         miravalle = mMap.addCircle(aire);
                         miravalle.setCenter(new LatLng(20.612687160151275, -103.34339308333261));
                         miravalle.setVisible(true);
+                        miravalle.setClickable(true);
 
                         lasPintas = mMap.addCircle(aire);
                         lasPintas.setCenter(new LatLng(20.57678391504256, -103.32647964788045));
                         lasPintas.setVisible(true);
+                        lasPintas.setClickable(true);
 
                         santaFe = mMap.addCircle(aire);
                         santaFe.setCenter(new LatLng(20.52919926636695, -103.37719039248793));
                         santaFe.setVisible(true);
+                        santaFe.setClickable(true);
+
+                        mMap.setOnCircleClickListener(new GoogleMap.OnCircleClickListener() {
+                            @Override
+                            public void onCircleClick(@NonNull Circle circle) {
+                                dialogBuilder = new AlertDialog.Builder(MainActivity.this);
+                                final View popupView = getLayoutInflater().inflate(R.layout.popup_aire, null);
+                                dialogBuilder.setView(popupView);
+                                dialog = dialogBuilder.create();
+                                dialog.show();
+                            }
+                        });
 
                         break;
                     case R.id.nav_green:
                         Toast.makeText(MainActivity.this, "Áreas verdes", Toast.LENGTH_SHORT).show();
 
                         if (flagAgua == 1) {
-                            rSantiago.setVisible(false);
-                            rVerde.setVisible(false);
-                            lagCaj.setVisible(false);
+                            rSantiago.setVisible(false); rVerde.setVisible(false); lagCaj.setVisible(false);
                             flagAgua = 0;
                         }
 
                         if (flagAire == 1){
-                            atemajac.setVisible(false);
-                            oblatos.setVisible(false);
-                            vallarta.setVisible(false);
-                            centro.setVisible(false);
-                            tlaquepaque.setVisible(false);
-                            lomaDorada.setVisible(false);
-                            aguilas.setVisible(false);
-                            miravalle.setVisible(false);
-                            lasPintas.setVisible(false);
-                            santaFe.setVisible(false);
+                            atemajac.setVisible(false); oblatos.setVisible(false); vallarta.setVisible(false); centro.setVisible(false); tlaquepaque.setVisible(false);
+                            lomaDorada.setVisible(false); aguilas.setVisible(false); miravalle.setVisible(false); lasPintas.setVisible(false); santaFe.setVisible(false);
                             flagAire = 0;
+                        }
+
+                        if (flagVerde == 1){
+                            break;
                         }
 
                         flagVerde = 1;
@@ -285,70 +286,99 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         pMetro = mMap.addCircle(verde);
                         pMetro.setCenter(new LatLng(20.67251732563299, -103.44046661765249));
                         pMetro.setVisible(true);
+                        pMetro.setClickable(true);
 
                         bColomos = mMap.addCircle(verde);
                         bColomos.setCenter(new LatLng(20.708405605073253, -103.39439377096463));
                         bColomos.setVisible(true);
+                        bColomos.setClickable(true);
 
                         bPrimavera = mMap.addCircle(verde);
                         bPrimavera.setCenter(new LatLng(20.655978455929677, -103.52752540969983));
                         bPrimavera.setVisible(true);
+                        bPrimavera.setClickable(true);
 
                         pGonzGallo = mMap.addCircle(verde);
                         pGonzGallo.setCenter(new LatLng(20.64758403407237, -103.3370436717078));
                         pGonzGallo.setVisible(true);
+                        pGonzGallo.setClickable(true);
 
                         pSoli = mMap.addCircle(verde);
                         pSoli.setCenter(new LatLng(20.661878738507795, -103.2689496838224));
                         pSoli.setVisible(true);
+                        pSoli.setClickable(true);
 
                         pSanRafa = mMap.addCircle(verde);
                         pSanRafa.setCenter(new LatLng(20.652914435610317, -103.29776166928336));
                         pSanRafa.setVisible(true);
+                        pSanRafa.setClickable(true);
 
                         cerroReina = mMap.addCircle(verde);
                         cerroReina.setCenter(new LatLng(20.634987605203605, -103.23966491371455));
                         cerroReina.setVisible(true);
+                        cerroReina.setClickable(true);
 
                         pAlcalde = mMap.addCircle(verde);
                         pAlcalde.setCenter(new LatLng(20.690509332409462, -103.35066117248687));
                         pAlcalde.setVisible(true);
+                        pAlcalde.setClickable(true);
 
                         pAguaAzul = mMap.addCircle(verde);
                         pAguaAzul.setCenter(new LatLng(20.65964819954858, -103.3480307849272));
                         pAguaAzul.setVisible(true);
+                        pAguaAzul.setClickable(true);
 
                         zoo = mMap.addCircle(verde);
                         zoo.setCenter(new LatLng(20.728729256954846, -103.30705763282965));
                         zoo.setVisible(true);
+                        zoo.setClickable(true);
 
                         barranca = mMap.addCircle(verde);
                         barranca.setCenter(new LatLng(20.708335206853167, -103.27821181800107));
                         barranca.setVisible(true);
+                        barranca.setClickable(true);
 
                         pMorelos = mMap.addCircle(verde);
                         pMorelos.setCenter(new LatLng(20.68050607332156, -103.34072179723735));
                         pMorelos.setVisible(true);
+                        pMorelos.setClickable(true);
 
                         pAvilaC = mMap.addCircle(verde);
                         pAvilaC.setCenter(new LatLng(20.71212245497867, -103.37229934669014));
                         pAvilaC.setVisible(true);
+                        pAvilaC.setClickable(true);
 
                         country = mMap.addCircle(verde);
                         country.setCenter(new LatLng(20.70634194117349, -103.37234226203344));
                         country.setVisible(true);
+                        country.setClickable(true);
 
                         pSanJacinto = mMap.addCircle(verde);
                         pSanJacinto.setCenter(new LatLng(20.66338260872832, -103.29738006524146));
                         pSanJacinto.setVisible(true);
+                        pSanJacinto.setClickable(true);
 
                         bCentinela = mMap.addCircle(verde);
                         bCentinela.setCenter(new LatLng(20.763644586096575, -103.37529305996419));
                         bCentinela.setVisible(true);
+                        bCentinela.setClickable(true);
 
                         pMontenegro = mMap.addCircle(verde);
                         pMontenegro.setCenter(new LatLng(20.57433779775093, -103.31570121143199));
                         pMontenegro.setVisible(true);
+                        pMontenegro.setClickable(true);
+
+                        mMap.setOnCircleClickListener(new GoogleMap.OnCircleClickListener() {
+                            @Override
+                            public void onCircleClick(@NonNull Circle circle) {
+                                dialogBuilder = new AlertDialog.Builder(MainActivity.this);
+                                final View popupView = getLayoutInflater().inflate(R.layout.popup_verde, null);
+                                dialogBuilder.setView(popupView);
+                                dialog = dialogBuilder.create();
+                                dialog.show();
+                            }
+                        });
+
                         break;
                     case R.id.nav_info:
                         Toast.makeText(MainActivity.this, "Acerca de", Toast.LENGTH_SHORT).show();

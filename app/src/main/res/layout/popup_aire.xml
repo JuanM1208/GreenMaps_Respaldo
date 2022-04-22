@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/alertAppbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/lightGray"
+        android:padding="15dp">
+
+        <RelativeLayout
+            android:layout_width="104dp"
+            android:layout_height="wrap_content"
+            android:background="@color/gray"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/imeca"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="10dp"
+                android:text="IMECA"
+                android:textStyle="bold"
+                android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/numImeca"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/imeca"
+                android:text="00"
+                android:textSize="40sp"
+                android:gravity="center"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/estacion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Estacion"
+                android:textSize="30sp"
+                android:padding="10dp"
+                android:layout_margin="10dp"/>
+
+        </RelativeLayout>
+
+    </com.google.android.material.appbar.MaterialToolbar>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="30dp"
+        android:layout_below="@+id/alertAppbar">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/contaminantes"
+            android:text="CONTAMINANTES"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:gravity="center"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/contaminantes"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/o3"
+                android:layout_marginTop="15dp"
+                android:text="O3:"
+                android:textSize="25sp" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/et_o3"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="90dp"
+                android:textSize="25sp"
+                android:text="Mant."
+                android:padding="0dp"
+                android:background="@color/white"
+                android:gravity=""/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/no2"
+                android:layout_below="@+id/o3"
+                android:layout_marginTop="5dp"
+                android:text="NO2:"
+                android:textSize="25sp"
+                android:gravity="center"/>
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/et_no2"
+                android:layout_marginTop="5dp"
+                android:layout_below="@+id/o3"
+                android:layout_marginStart="90dp"
+                android:textSize="25sp"
+                android:text="Mant."
+                android:padding="0dp"
+                android:background="@color/white"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/co"
+                android:layout_below="@+id/no2"
+                android:layout_marginTop="5dp"
+                android:text="CO:"
+                android:textSize="25sp"
+                android:gravity="center"/>
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/et_co"
+                android:layout_marginTop="5dp"
+                android:layout_below="@+id/no2"
+                android:layout_marginStart="90dp"
+                android:textSize="25sp"
+                android:text="Mant."
+                android:padding="0dp"
+                android:background="@color/white"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/so2"
+                android:layout_below="@+id/co"
+                android:layout_marginTop="5dp"
+                android:text="SO2:"
+                android:textSize="25sp"
+                android:gravity="center"/>
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/et_so2"
+                android:layout_marginTop="5dp"
+                android:layout_below="@+id/co"
+                android:layout_marginStart="90dp"
+                android:textSize="25sp"
+                android:text="Mant."
+                android:padding="0dp"
+                android:background="@color/white"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/pm10"
+                android:layout_below="@+id/so2"
+                android:layout_marginTop="5dp"
+                android:text="PM10:"
+                android:textSize="25sp"
+                android:gravity="center"/>
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/et_pm10"
+                android:layout_marginTop="5dp"
+                android:layout_below="@+id/so2"
+                android:layout_marginStart="90dp"
+                android:textSize="25sp"
+                android:text="Mant."
+                android:padding="0dp"
+                android:background="@color/white"/>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/pm25"
+                android:layout_below="@+id/pm10"
+                android:layout_marginTop="5dp"
+                android:text="PM25:"
+                android:textSize="25sp"
+                android:gravity="center"/>
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/et_pm25"
+                android:layout_marginTop="5dp"
+                android:layout_below="@+id/pm10"
+                android:layout_marginStart="90dp"
+                android:textSize="25sp"
+                android:text="Mant."
+                android:padding="0dp"
+                android:background="@color/white"/>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/alertAppbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/green"
+        android:padding="15dp">
+
+        <RelativeLayout
+            android:layout_width="104dp"
+            android:layout_height="wrap_content"
+            android:background="@color/light_green"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/estado"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="10dp"
+                android:text="ESTADO"
+                android:textStyle="bold"
+                android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/letraEstado"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/estado"
+                android:text="B"
+                android:textSize="40sp"
+                android:gravity="center"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/zonaVerde"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Zona Verde"
+                android:textSize="30sp"
+                android:padding="10dp"
+                android:layout_margin="10dp"/>
+
+        </RelativeLayout>
+
+    </com.google.android.material.appbar.MaterialToolbar>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="30dp"
+        android:layout_below="@+id/alertAppbar">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/contaminantes"
+            android:text="DATOS"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:gravity="center"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/contaminantes"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/extension"
+                android:layout_marginTop="15dp"
+                android:text="Extensión:"
+                android:textSize="25sp" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/et_extension"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="130dp"
+                android:textSize="25sp"
+                android:text="Mant."
+                android:padding="0dp"
+                android:background="@color/white"
+                android:gravity=""/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/situacion"
+                android:layout_below="@+id/extension"
+                android:layout_marginTop="5dp"
+                android:text="Situacion:"
+                android:textSize="25sp"
+                android:gravity="center"/>
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/et_situacion"
+                android:layout_marginTop="5dp"
+                android:layout_below="@+id/extension"
+                android:layout_marginStart="130dp"
+                android:textSize="25sp"
+                android:text="Mant."
+                android:padding="0dp"
+                android:background="@color/white"/>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>
