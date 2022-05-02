@@ -1,152 +1,151 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Registro"
-    android:background="@color/light_green">
+    android:background="@color/light_green"
+    tools:context=".Registro">
 
     <TextView
+        android:id="@+id/txtEncabezadoRegistro"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/txtEncabezadoRegistro"
         android:layout_marginTop="30dp"
         android:text="Registro"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-        android:textStyle="bold"
-        android:textSize="30dp"/>
+        android:textSize="30sp"
+        android:textStyle="bold" />
 
     <TextView
+        android:id="@+id/txtUsuario"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/txtUsuario"
         android:layout_below="@+id/txtEncabezadoRegistro"
+        android:layout_marginHorizontal="25dp"
+        android:layout_marginTop="30dp"
+        android:padding="6dp"
         android:text="Nombre de usuario*"
         android:textColor="#555555"
-        android:padding="6dp"
-        android:textSize="16sp"
-        android:layout_marginTop="30dp"
-        android:layout_marginHorizontal="25dp"/>
+        android:textSize="16sp" />
 
     <EditText
+        android:id="@+id/etUsuario"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/etUsuario"
+        android:layout_below="@+id/txtUsuario"
+        android:layout_marginHorizontal="25dp"
+        android:background="@drawable/border"
         android:hint="Ingresa tu nombre de usuario"
         android:inputType="textPersonName"
-        android:textSize="16sp"
         android:padding="6dp"
-        android:layout_below="@+id/txtUsuario"
-        android:background="@drawable/border"
-        android:layout_marginHorizontal="25dp"/>
+        android:textSize="16sp" />
 
     <TextView
+        android:id="@+id/txtEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/txtEmail"
         android:layout_below="@+id/etUsuario"
+        android:layout_marginHorizontal="25dp"
+        android:layout_marginTop="10dp"
+        android:padding="6dp"
         android:text="Email*"
         android:textColor="#555555"
-        android:padding="6dp"
-        android:textSize="16sp"
-        android:layout_marginTop="10dp"
-        android:layout_marginHorizontal="25dp"/>
+        android:textSize="16sp" />
 
     <EditText
+        android:id="@+id/etEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/etEmail"
+        android:layout_below="@+id/txtEmail"
+        android:layout_marginHorizontal="25dp"
+        android:background="@drawable/border"
         android:hint="Ingresa tu email"
         android:inputType="textEmailAddress"
-        android:textSize="16sp"
         android:padding="6dp"
-        android:layout_below="@+id/txtEmail"
-        android:background="@drawable/border"
-        android:layout_marginHorizontal="25dp"/>
+        android:textSize="16sp" />
 
     <TextView
+        android:id="@+id/txtPhone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/txtPhone"
         android:layout_below="@+id/etEmail"
+        android:layout_marginHorizontal="25dp"
+        android:layout_marginTop="10dp"
+        android:padding="6dp"
         android:text="No. Telefonico*"
         android:textColor="#555555"
-        android:padding="6dp"
-        android:textSize="16sp"
-        android:layout_marginTop="10dp"
-        android:layout_marginHorizontal="25dp"/>
+        android:textSize="16sp" />
 
     <EditText
+        android:id="@+id/etPhone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/etPhone"
+        android:layout_below="@+id/txtPhone"
+        android:layout_marginHorizontal="25dp"
+        android:background="@drawable/border"
         android:hint="Digite su numero telefonico"
         android:inputType="phone"
-        android:textSize="16sp"
         android:padding="6dp"
-        android:layout_below="@+id/txtPhone"
-        android:background="@drawable/border"
-        android:layout_marginHorizontal="25dp"/>
+        android:textSize="16sp" />
 
     <TextView
+        android:id="@+id/txtPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/txtPassword"
         android:layout_below="@+id/etPhone"
+        android:layout_marginHorizontal="25dp"
+        android:layout_marginTop="10dp"
+        android:padding="6dp"
         android:text="Contraseña*"
         android:textColor="#555555"
-        android:padding="6dp"
-        android:textSize="16sp"
-        android:layout_marginTop="10dp"
-        android:layout_marginHorizontal="25dp"/>
+        android:textSize="16sp" />
 
     <EditText
+        android:id="@+id/etPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/etPassword"
+        android:layout_below="@+id/txtPassword"
+        android:layout_marginHorizontal="25dp"
+        android:background="@drawable/border"
         android:hint="Crea una contraseña"
         android:inputType="textPassword"
-        android:textSize="16sp"
         android:padding="6dp"
-        android:layout_below="@+id/txtPassword"
-        android:background="@drawable/border"
-        android:layout_marginHorizontal="25dp"/>
+        android:textSize="16sp" />
 
     <TextView
+        android:id="@+id/txtConfirmPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/txtConfirmPassword"
         android:layout_below="@+id/etPassword"
+        android:layout_marginHorizontal="25dp"
+        android:layout_marginTop="10dp"
+        android:padding="6dp"
         android:text="Confirmar contraseña*"
         android:textColor="#555555"
-        android:padding="6dp"
-        android:textSize="16sp"
-        android:layout_marginTop="10dp"
-        android:layout_marginHorizontal="25dp"/>
+        android:textSize="16sp" />
 
     <EditText
+        android:id="@+id/etConfirmPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/etConfirmPassword"
+        android:layout_below="@+id/txtConfirmPassword"
+        android:layout_marginHorizontal="25dp"
+        android:background="@drawable/border"
         android:hint="Confirma tu contraseña"
         android:inputType="textPassword"
-        android:textSize="16sp"
         android:padding="6dp"
-        android:layout_below="@+id/txtConfirmPassword"
-        android:background="@drawable/border"
-        android:layout_marginHorizontal="25dp"/>
+        android:textSize="16sp" />
 
     <Button
+        android:id="@+id/btnEnviar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/btnEnviar"
         android:layout_below="@+id/etConfirmPassword"
-        android:text="Enviar"
-        android:layout_marginTop="15dp"
         android:layout_marginHorizontal="25dp"
-        android:backgroundTint="@color/dark_green"/>
+        android:layout_marginTop="15dp"
+        android:backgroundTint="@color/dark_green"
+        android:text="Enviar" />
 
 </RelativeLayout>

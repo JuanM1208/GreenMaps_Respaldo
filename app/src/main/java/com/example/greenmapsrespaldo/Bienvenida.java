@@ -183,8 +183,5 @@ public class Bienvenida extends AppCompatActivity {
             startActivity(new Intent(Bienvenida.this, MainActivity.class));
             finish();
         }
-        else {
-            Toast.makeText(Bienvenida.this, "Ya puedes iniciar sesión", Toast.LENGTH_SHORT).show();
-        }
     }
 }

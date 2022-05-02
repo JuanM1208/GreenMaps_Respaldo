@@ -6,13 +6,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/alertAppbar"
+        android:id="@+id/verdeAppbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/green"
         android:padding="15dp">
 
         <RelativeLayout
+            android:id="@+id/frameVerde"
             android:layout_width="104dp"
             android:layout_height="wrap_content"
             android:background="@color/light_green"
@@ -59,7 +60,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="30dp"
-        android:layout_below="@+id/alertAppbar">
+        android:layout_below="@+id/verdeAppbar">
 
         <TextView
             android:layout_width="match_parent"

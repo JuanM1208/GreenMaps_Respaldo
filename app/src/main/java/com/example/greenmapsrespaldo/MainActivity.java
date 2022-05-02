@@ -20,6 +20,9 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -44,6 +47,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
@@ -60,6 +68,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private int GPS_REQUEST_CODE = 9001;
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
+
+    private DatabaseReference mDatabase;
+    private TextView estacion, cuerpoAgua, zonaVerde, numImeca, numPh, letraEstado;
+    private EditText o3, no2, co, so2, pm10, pm25, dureza, coliformes, solidos, sulfatos, mercurio, turbiedad, extension, situacion;
+    private MaterialToolbar aguaAppbar, aireAppbar, verdeAppbar;
+    private RelativeLayout frameAgua, frameAire, frameVerde;
 
     int flagAire = 0;
     int flagAgua = 0;
@@ -96,6 +110,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
         fab = findViewById(R.id.fab);
 
         checkMyPermission();
@@ -128,8 +144,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 switch (id) {
                     case R.id.nav_home:
                         Toast.makeText(MainActivity.this, "Inicio", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(MainActivity.this, Bienvenida.class);
-                        startActivity(intent);
+                        //Intent intent = new Intent(MainActivity.this, Bienvenida.class);
+                        //startActivity(intent);
                         break;
                     case R.id.nav_water:
                         Toast.makeText(MainActivity.this, "Agua", Toast.LENGTH_SHORT).show();
@@ -173,9 +189,132 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             public void onCircleClick(@NonNull Circle circle) {
                                 dialogBuilder = new AlertDialog.Builder(MainActivity.this);
                                 final View popupView = getLayoutInflater().inflate(R.layout.popup_agua, null);
+
+                                aguaAppbar = (MaterialToolbar) popupView.findViewById(R.id.aguaAppbar);
+                                frameAgua = (RelativeLayout) popupView.findViewById(R.id.frameAgua);
+
+                                estacion = (TextView) popupView.findViewById(R.id.estacion);
+                                cuerpoAgua = (TextView) popupView.findViewById(R.id.cuerpoAgua);
+                                zonaVerde = (TextView) popupView.findViewById(R.id.zonaVerde);
+                                numImeca = (TextView) popupView.findViewById(R.id.numImeca);
+                                numPh = (TextView) popupView.findViewById(R.id.numPh);
+                                letraEstado = (TextView) popupView.findViewById(R.id.letraEstado);
+
+                                o3 = (EditText) popupView.findViewById(R.id.et_o3);
+                                no2 = (EditText) popupView.findViewById(R.id.et_no2);
+                                co = (EditText) popupView.findViewById(R.id.et_co);
+                                so2 = (EditText) popupView.findViewById(R.id.et_so2);
+                                pm10 = (EditText) popupView.findViewById(R.id.et_pm10);
+                                pm25 = (EditText) popupView.findViewById(R.id.et_pm25);
+                                dureza = (EditText) popupView.findViewById(R.id.et_dureza);
+                                coliformes = (EditText) popupView.findViewById(R.id.et_coliformes);
+                                solidos = (EditText) popupView.findViewById(R.id.et_solidos);
+                                sulfatos = (EditText) popupView.findViewById(R.id.et_sulfatos);
+                                mercurio = (EditText) popupView.findViewById(R.id.et_mercurio);
+                                turbiedad = (EditText) popupView.findViewById(R.id.et_turbiedad);
+                                extension = (EditText) popupView.findViewById(R.id.et_extension);
+                                situacion = (EditText) popupView.findViewById(R.id.et_situacion);
+
                                 dialogBuilder.setView(popupView);
                                 dialog = dialogBuilder.create();
                                 dialog.show();
+
+                                if (circle.equals(rSantiago)) {
+                                    cuerpoAgua.setText("Rio Santiago");
+                                    mDatabase.child("Agua").child("Rio Santiago").addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            if (dataSnapshot.exists()) {
+                                                //Toast.makeText(MainActivity.this, "Cambio", Toast.LENGTH_SHORT).show();
+                                                String ph = dataSnapshot.child("pH").getValue().toString();
+                                                numPh.setText(ph);
+                                                String nDureza = dataSnapshot.child("Dureza").getValue().toString();
+                                                dureza.setText(nDureza);
+                                                String nColiformes = dataSnapshot.child("Coliformes").getValue().toString();
+                                                coliformes.setText(nColiformes);
+                                                String nSolidos = dataSnapshot.child("Solidos").getValue().toString();
+                                                solidos.setText(nSolidos);
+                                                String nSulfatos = dataSnapshot.child("Sulfatos").getValue().toString();
+                                                sulfatos.setText(nSulfatos);
+                                                String nMercurio = dataSnapshot.child("Mercurio").getValue().toString();
+                                                mercurio.setText(nMercurio);
+                                                String nTurbiedad = dataSnapshot.child("Turbiedad").getValue().toString();
+                                                turbiedad.setText(nTurbiedad);
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+                                            Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+
+                                } //termina circle.equals
+
+                                if (circle.equals(rVerde)) {
+                                    cuerpoAgua.setText("Rio Verde");
+                                    mDatabase.child("Agua").child("Rio Verde").addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            if (dataSnapshot.exists()) {
+                                                //Toast.makeText(MainActivity.this, "Cambio", Toast.LENGTH_SHORT).show();
+                                                String ph = dataSnapshot.child("pH").getValue().toString();
+                                                numPh.setText(ph);
+                                                String nDureza = dataSnapshot.child("Dureza").getValue().toString();
+                                                dureza.setText(nDureza);
+                                                String nColiformes = dataSnapshot.child("Coliformes").getValue().toString();
+                                                coliformes.setText(nColiformes);
+                                                String nSolidos = dataSnapshot.child("Solidos").getValue().toString();
+                                                solidos.setText(nSolidos);
+                                                String nSulfatos = dataSnapshot.child("Sulfatos").getValue().toString();
+                                                sulfatos.setText(nSulfatos);
+                                                String nMercurio = dataSnapshot.child("Mercurio").getValue().toString();
+                                                mercurio.setText(nMercurio);
+                                                String nTurbiedad = dataSnapshot.child("Turbiedad").getValue().toString();
+                                                turbiedad.setText(nTurbiedad);
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+                                            Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+
+                                } //termina circle.equals
+
+                                if (circle.equals(lagCaj)) {
+                                    cuerpoAgua.setText("Laguna de Cajititlán");
+                                    mDatabase.child("Agua").child("Lag Cajititlan").addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            if (dataSnapshot.exists()) {
+                                                //Toast.makeText(MainActivity.this, "Cambio", Toast.LENGTH_SHORT).show();
+                                                String ph = dataSnapshot.child("pH").getValue().toString();
+                                                numPh.setText(ph);
+                                                String nDureza = dataSnapshot.child("Dureza").getValue().toString();
+                                                dureza.setText(nDureza);
+                                                String nColiformes = dataSnapshot.child("Coliformes").getValue().toString();
+                                                coliformes.setText(nColiformes);
+                                                String nSolidos = dataSnapshot.child("Solidos").getValue().toString();
+                                                solidos.setText(nSolidos);
+                                                String nSulfatos = dataSnapshot.child("Sulfatos").getValue().toString();
+                                                sulfatos.setText(nSulfatos);
+                                                String nMercurio = dataSnapshot.child("Mercurio").getValue().toString();
+                                                mercurio.setText(nMercurio);
+                                                String nTurbiedad = dataSnapshot.child("Turbiedad").getValue().toString();
+                                                turbiedad.setText(nTurbiedad);
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+                                            Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+
+                                } //termina circle.equals
+
                             }
                         });
 
@@ -256,9 +395,574 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             public void onCircleClick(@NonNull Circle circle) {
                                 dialogBuilder = new AlertDialog.Builder(MainActivity.this);
                                 final View popupView = getLayoutInflater().inflate(R.layout.popup_aire, null);
+
+                                aireAppbar = (MaterialToolbar) popupView.findViewById(R.id.aireAppbar);
+                                frameAire = (RelativeLayout) popupView.findViewById(R.id.frameAire);
+
+                                estacion = (TextView) popupView.findViewById(R.id.estacion);
+                                numImeca = (TextView) popupView.findViewById(R.id.numImeca);
+
+                                o3 = (EditText) popupView.findViewById(R.id.et_o3);
+                                no2 = (EditText) popupView.findViewById(R.id.et_no2);
+                                co = (EditText) popupView.findViewById(R.id.et_co);
+                                so2 = (EditText) popupView.findViewById(R.id.et_so2);
+                                pm10 = (EditText) popupView.findViewById(R.id.et_pm10);
+                                pm25 = (EditText) popupView.findViewById(R.id.et_pm25);
+
                                 dialogBuilder.setView(popupView);
                                 dialog = dialogBuilder.create();
                                 dialog.show();
+
+                                if (circle.equals(aguilas)){
+                                    estacion.setText("Águilas");
+                                    mDatabase.child("Aire").child("Aguilas").addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            if (dataSnapshot.exists()) {
+                                                //Toast.makeText(MainActivity.this, "Cambio", Toast.LENGTH_SHORT).show();
+                                                String IMECA = dataSnapshot.child("IMECA").getValue().toString();
+                                                numImeca.setText(IMECA);
+                                                String O3 = dataSnapshot.child("O3").getValue().toString();
+                                                o3.setText(O3);
+                                                String NO2 = dataSnapshot.child("NO2").getValue().toString();
+                                                no2.setText(NO2);
+                                                String CO = dataSnapshot.child("CO").getValue().toString();
+                                                co.setText(CO);
+                                                String SO2 = dataSnapshot.child("SO2").getValue().toString();
+                                                so2.setText(SO2);
+                                                String PM10 = dataSnapshot.child("PM10").getValue().toString();
+                                                pm10.setText(PM10);
+                                                String PM25 = dataSnapshot.child("PM25").getValue().toString();
+                                                pm25.setText(PM25);
+
+                                                if (!IMECA.equals("")){
+                                                    int imeca = Integer.parseInt(IMECA);
+                                                    if (imeca <= 50){
+                                                        aireAppbar.setBackgroundColor(Color.rgb(148, 255, 51 ));
+                                                        frameAire.setBackgroundColor(Color.rgb(226, 255, 200 ));
+                                                    }
+                                                    else if (imeca <= 100){
+                                                        aireAppbar.setBackgroundColor(Color.rgb(255, 230, 28 ));
+                                                        frameAire.setBackgroundColor(Color.rgb(255, 243, 146 ));
+                                                    }
+                                                    else if (imeca <= 150){
+                                                        aireAppbar.setBackgroundColor(Color.rgb(255, 141, 27 ));
+                                                        frameAire.setBackgroundColor(Color.rgb(255, 203, 152 ));
+                                                    }
+                                                    else if (imeca <= 200){
+                                                        aireAppbar.setBackgroundColor(Color.rgb(255, 37, 20 ));
+                                                        frameAire.setBackgroundColor(Color.rgb(255, 165, 158 ));
+                                                    }
+                                                    else if (imeca > 200){
+                                                        aireAppbar.setBackgroundColor(Color.rgb(158, 39, 255 ));
+                                                        frameAire.setBackgroundColor(Color.rgb(224, 185, 255 ));
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+                                            Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                } //termina circle.equals
+
+                                if (circle.equals(atemajac)){
+                                    estacion.setText("Atemajac");
+                                    mDatabase.child("Aire").child("Atemajac").addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            if (dataSnapshot.exists()) {
+                                                //Toast.makeText(MainActivity.this, "Cambio", Toast.LENGTH_SHORT).show();
+                                                String IMECA = dataSnapshot.child("IMECA").getValue().toString();
+                                                numImeca.setText(IMECA);
+                                                String O3 = dataSnapshot.child("O3").getValue().toString();
+                                                o3.setText(O3);
+                                                String NO2 = dataSnapshot.child("NO2").getValue().toString();
+                                                no2.setText(NO2);
+                                                String CO = dataSnapshot.child("CO").getValue().toString();
+                                                co.setText(CO);
+                                                String SO2 = dataSnapshot.child("SO2").getValue().toString();
+                                                so2.setText(SO2);
+                                                String PM10 = dataSnapshot.child("PM10").getValue().toString();
+                                                pm10.setText(PM10);
+                                                String PM25 = dataSnapshot.child("PM25").getValue().toString();
+                                                pm25.setText(PM25);
+
+                                                if (!IMECA.equals("")){
+                                                    int imeca = Integer.parseInt(IMECA);
+                                                    if (imeca <= 50){
+                                                        aireAppbar.setBackgroundColor(Color.rgb(148, 255, 51 ));
+                                                        frameAire.setBackgroundColor(Color.rgb(226, 255, 200 ));
+                                                    }
+                                                    else if (imeca <= 100){
+                                                        aireAppbar.setBackgroundColor(Color.rgb(255, 230, 28 ));
+                                                        frameAire.setBackgroundColor(Color.rgb(255, 243, 146 ));
+                                                    }
+                                                    else if (imeca <= 150){
+                                                        aireAppbar.setBackgroundColor(Color.rgb(255, 141, 27 ));
+                                                        frameAire.setBackgroundColor(Color.rgb(255, 203, 152 ));
+                                                    }
+                                                    else if (imeca <= 200){
+                                                        aireAppbar.setBackgroundColor(Color.rgb(255, 37, 20 ));
+                                                        frameAire.setBackgroundColor(Color.rgb(255, 165, 158 ));
+                                                    }
+                                                    else if (imeca > 200){
+                                                        aireAppbar.setBackgroundColor(Color.rgb(158, 39, 255 ));
+                                                        frameAire.setBackgroundColor(Color.rgb(224, 185, 255 ));
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+                                            Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                } //termina circle.equals
+
+                                if (circle.equals(centro)){
+                                    estacion.setText("Centro");
+                                    mDatabase.child("Aire").child("Centro").addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            if (dataSnapshot.exists()) {
+                                                //Toast.makeText(MainActivity.this, "Cambio", Toast.LENGTH_SHORT).show();
+                                                String IMECA = dataSnapshot.child("IMECA").getValue().toString();
+                                                numImeca.setText(IMECA);
+                                                String O3 = dataSnapshot.child("O3").getValue().toString();
+                                                o3.setText(O3);
+                                                String NO2 = dataSnapshot.child("NO2").getValue().toString();
+                                                no2.setText(NO2);
+                                                String CO = dataSnapshot.child("CO").getValue().toString();
+                                                co.setText(CO);
+                                                String SO2 = dataSnapshot.child("SO2").getValue().toString();
+                                                so2.setText(SO2);
+                                                String PM10 = dataSnapshot.child("PM10").getValue().toString();
+                                                pm10.setText(PM10);
+                                                String PM25 = dataSnapshot.child("PM25").getValue().toString();
+                                                pm25.setText(PM25);
+
+                                                if (!IMECA.equals("")){
+                                                    int imeca = Integer.parseInt(IMECA);
+                                                    if (imeca <= 50){
+                                                        aireAppbar.setBackgroundColor(Color.rgb(148, 255, 51 ));
+                                                        frameAire.setBackgroundColor(Color.rgb(226, 255, 200 ));
+                                                    }
+                                                    else if (imeca <= 100){
+                                                        aireAppbar.setBackgroundColor(Color.rgb(255, 230, 28 ));
+                                                        frameAire.setBackgroundColor(Color.rgb(255, 243, 146 ));
+                                                    }
+                                                    else if (imeca <= 150){
+                                                        aireAppbar.setBackgroundColor(Color.rgb(255, 141, 27 ));
+                                                        frameAire.setBackgroundColor(Color.rgb(255, 203, 152 ));
+                                                    }
+                                                    else if (imeca <= 200){
+                                                        aireAppbar.setBackgroundColor(Color.rgb(255, 37, 20 ));
+                                                        frameAire.setBackgroundColor(Color.rgb(255, 165, 158 ));
+                                                    }
+                                                    else if (imeca > 200){
+                                                        aireAppbar.setBackgroundColor(Color.rgb(158, 39, 255 ));
+                                                        frameAire.setBackgroundColor(Color.rgb(224, 185, 255 ));
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+                                            Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                } //termina circle.equals
+
+                                if (circle.equals(lasPintas)){
+                                    estacion.setText("Las Pintas");
+                                    mDatabase.child("Aire").child("Las Pintas").addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            if (dataSnapshot.exists()) {
+                                                //Toast.makeText(MainActivity.this, "Cambio", Toast.LENGTH_SHORT).show();
+                                                String IMECA = dataSnapshot.child("IMECA").getValue().toString();
+                                                numImeca.setText(IMECA);
+                                                String O3 = dataSnapshot.child("O3").getValue().toString();
+                                                o3.setText(O3);
+                                                String NO2 = dataSnapshot.child("NO2").getValue().toString();
+                                                no2.setText(NO2);
+                                                String CO = dataSnapshot.child("CO").getValue().toString();
+                                                co.setText(CO);
+                                                String SO2 = dataSnapshot.child("SO2").getValue().toString();
+                                                so2.setText(SO2);
+                                                String PM10 = dataSnapshot.child("PM10").getValue().toString();
+                                                pm10.setText(PM10);
+                                                String PM25 = dataSnapshot.child("PM25").getValue().toString();
+                                                pm25.setText(PM25);
+
+                                                if (!IMECA.equals("")){
+                                                    int imeca = Integer.parseInt(IMECA);
+                                                    if (imeca <= 50){
+                                                        aireAppbar.setBackgroundColor(Color.rgb(148, 255, 51 ));
+                                                        frameAire.setBackgroundColor(Color.rgb(226, 255, 200 ));
+                                                    }
+                                                    else if (imeca <= 100){
+                                                        aireAppbar.setBackgroundColor(Color.rgb(255, 230, 28 ));
+                                                        frameAire.setBackgroundColor(Color.rgb(255, 243, 146 ));
+                                                    }
+                                                    else if (imeca <= 150){
+                                                        aireAppbar.setBackgroundColor(Color.rgb(255, 141, 27 ));
+                                                        frameAire.setBackgroundColor(Color.rgb(255, 203, 152 ));
+                                                    }
+                                                    else if (imeca <= 200){
+                                                        aireAppbar.setBackgroundColor(Color.rgb(255, 37, 20 ));
+                                                        frameAire.setBackgroundColor(Color.rgb(255, 165, 158 ));
+                                                    }
+                                                    else if (imeca > 200){
+                                                        aireAppbar.setBackgroundColor(Color.rgb(158, 39, 255 ));
+                                                        frameAire.setBackgroundColor(Color.rgb(224, 185, 255 ));
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+                                            Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                } //termina circle.equals
+
+                                if (circle.equals(lomaDorada)){
+                                    estacion.setText("Loma Dorada");
+                                    mDatabase.child("Aire").child("Loma Dorada").addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            if (dataSnapshot.exists()) {
+                                                //Toast.makeText(MainActivity.this, "Cambio", Toast.LENGTH_SHORT).show();
+                                                String IMECA = dataSnapshot.child("IMECA").getValue().toString();
+                                                numImeca.setText(IMECA);
+                                                String O3 = dataSnapshot.child("O3").getValue().toString();
+                                                o3.setText(O3);
+                                                String NO2 = dataSnapshot.child("NO2").getValue().toString();
+                                                no2.setText(NO2);
+                                                String CO = dataSnapshot.child("CO").getValue().toString();
+                                                co.setText(CO);
+                                                String SO2 = dataSnapshot.child("SO2").getValue().toString();
+                                                so2.setText(SO2);
+                                                String PM10 = dataSnapshot.child("PM10").getValue().toString();
+                                                pm10.setText(PM10);
+                                                String PM25 = dataSnapshot.child("PM25").getValue().toString();
+                                                pm25.setText(PM25);
+
+                                                if (!IMECA.equals("")){
+                                                    int imeca = Integer.parseInt(IMECA);
+                                                    if (imeca <= 50){
+                                                        aireAppbar.setBackgroundColor(Color.rgb(148, 255, 51 ));
+                                                        frameAire.setBackgroundColor(Color.rgb(226, 255, 200 ));
+                                                    }
+                                                    else if (imeca <= 100){
+                                                        aireAppbar.setBackgroundColor(Color.rgb(255, 230, 28 ));
+                                                        frameAire.setBackgroundColor(Color.rgb(255, 243, 146 ));
+                                                    }
+                                                    else if (imeca <= 150){
+                                                        aireAppbar.setBackgroundColor(Color.rgb(255, 141, 27 ));
+                                                        frameAire.setBackgroundColor(Color.rgb(255, 203, 152 ));
+                                                    }
+                                                    else if (imeca <= 200){
+                                                        aireAppbar.setBackgroundColor(Color.rgb(255, 37, 20 ));
+                                                        frameAire.setBackgroundColor(Color.rgb(255, 165, 158 ));
+                                                    }
+                                                    else if (imeca > 200){
+                                                        aireAppbar.setBackgroundColor(Color.rgb(158, 39, 255 ));
+                                                        frameAire.setBackgroundColor(Color.rgb(224, 185, 255 ));
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+                                            Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                } //termina circle.equals
+
+                                if (circle.equals(miravalle)){
+                                    estacion.setText("Miravalle");
+                                    mDatabase.child("Aire").child("Miravalle").addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            if (dataSnapshot.exists()) {
+                                                //Toast.makeText(MainActivity.this, "Cambio", Toast.LENGTH_SHORT).show();
+                                                String IMECA = dataSnapshot.child("IMECA").getValue().toString();
+                                                numImeca.setText(IMECA);
+                                                String O3 = dataSnapshot.child("O3").getValue().toString();
+                                                o3.setText(O3);
+                                                String NO2 = dataSnapshot.child("NO2").getValue().toString();
+                                                no2.setText(NO2);
+                                                String CO = dataSnapshot.child("CO").getValue().toString();
+                                                co.setText(CO);
+                                                String SO2 = dataSnapshot.child("SO2").getValue().toString();
+                                                so2.setText(SO2);
+                                                String PM10 = dataSnapshot.child("PM10").getValue().toString();
+                                                pm10.setText(PM10);
+                                                String PM25 = dataSnapshot.child("PM25").getValue().toString();
+                                                pm25.setText(PM25);
+
+                                                if (!IMECA.equals("")){
+                                                    int imeca = Integer.parseInt(IMECA);
+                                                    if (imeca <= 50){
+                                                        aireAppbar.setBackgroundColor(Color.rgb(148, 255, 51 ));
+                                                        frameAire.setBackgroundColor(Color.rgb(226, 255, 200 ));
+                                                    }
+                                                    else if (imeca <= 100){
+                                                        aireAppbar.setBackgroundColor(Color.rgb(255, 230, 28 ));
+                                                        frameAire.setBackgroundColor(Color.rgb(255, 243, 146 ));
+                                                    }
+                                                    else if (imeca <= 150){
+                                                        aireAppbar.setBackgroundColor(Color.rgb(255, 141, 27 ));
+                                                        frameAire.setBackgroundColor(Color.rgb(255, 203, 152 ));
+                                                    }
+                                                    else if (imeca <= 200){
+                                                        aireAppbar.setBackgroundColor(Color.rgb(255, 37, 20 ));
+                                                        frameAire.setBackgroundColor(Color.rgb(255, 165, 158 ));
+                                                    }
+                                                    else if (imeca > 200){
+                                                        aireAppbar.setBackgroundColor(Color.rgb(158, 39, 255 ));
+                                                        frameAire.setBackgroundColor(Color.rgb(224, 185, 255 ));
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+                                            Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                } //termina circle.equals
+
+                                if (circle.equals(oblatos)){
+                                    estacion.setText("Oblatos");
+                                    mDatabase.child("Aire").child("Oblatos").addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            if (dataSnapshot.exists()) {
+                                                //Toast.makeText(MainActivity.this, "Cambio", Toast.LENGTH_SHORT).show();
+                                                String IMECA = dataSnapshot.child("IMECA").getValue().toString();
+                                                numImeca.setText(IMECA);
+                                                String O3 = dataSnapshot.child("O3").getValue().toString();
+                                                o3.setText(O3);
+                                                String NO2 = dataSnapshot.child("NO2").getValue().toString();
+                                                no2.setText(NO2);
+                                                String CO = dataSnapshot.child("CO").getValue().toString();
+                                                co.setText(CO);
+                                                String SO2 = dataSnapshot.child("SO2").getValue().toString();
+                                                so2.setText(SO2);
+                                                String PM10 = dataSnapshot.child("PM10").getValue().toString();
+                                                pm10.setText(PM10);
+                                                String PM25 = dataSnapshot.child("PM25").getValue().toString();
+                                                pm25.setText(PM25);
+
+                                                if (!IMECA.equals("")){
+                                                    int imeca = Integer.parseInt(IMECA);
+                                                    if (imeca <= 50){
+                                                        aireAppbar.setBackgroundColor(Color.rgb(148, 255, 51 ));
+                                                        frameAire.setBackgroundColor(Color.rgb(226, 255, 200 ));
+                                                    }
+                                                    else if (imeca <= 100){
+                                                        aireAppbar.setBackgroundColor(Color.rgb(255, 230, 28 ));
+                                                        frameAire.setBackgroundColor(Color.rgb(255, 243, 146 ));
+                                                    }
+                                                    else if (imeca <= 150){
+                                                        aireAppbar.setBackgroundColor(Color.rgb(255, 141, 27 ));
+                                                        frameAire.setBackgroundColor(Color.rgb(255, 203, 152 ));
+                                                    }
+                                                    else if (imeca <= 200){
+                                                        aireAppbar.setBackgroundColor(Color.rgb(255, 37, 20 ));
+                                                        frameAire.setBackgroundColor(Color.rgb(255, 165, 158 ));
+                                                    }
+                                                    else if (imeca > 200){
+                                                        aireAppbar.setBackgroundColor(Color.rgb(158, 39, 255 ));
+                                                        frameAire.setBackgroundColor(Color.rgb(224, 185, 255 ));
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+                                            Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                } //termina circle.equals
+
+                                if (circle.equals(santaFe)){
+                                    estacion.setText("Santa Fe");
+                                    mDatabase.child("Aire").child("Santa Fe").addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            if (dataSnapshot.exists()) {
+                                                //Toast.makeText(MainActivity.this, "Cambio", Toast.LENGTH_SHORT).show();
+                                                String IMECA = dataSnapshot.child("IMECA").getValue().toString();
+                                                numImeca.setText(IMECA);
+                                                String O3 = dataSnapshot.child("O3").getValue().toString();
+                                                o3.setText(O3);
+                                                String NO2 = dataSnapshot.child("NO2").getValue().toString();
+                                                no2.setText(NO2);
+                                                String CO = dataSnapshot.child("CO").getValue().toString();
+                                                co.setText(CO);
+                                                String SO2 = dataSnapshot.child("SO2").getValue().toString();
+                                                so2.setText(SO2);
+                                                String PM10 = dataSnapshot.child("PM10").getValue().toString();
+                                                pm10.setText(PM10);
+                                                String PM25 = dataSnapshot.child("PM25").getValue().toString();
+                                                pm25.setText(PM25);
+
+                                                if (!IMECA.equals("")){
+                                                    int imeca = Integer.parseInt(IMECA);
+                                                    if (imeca <= 50){
+                                                        aireAppbar.setBackgroundColor(Color.rgb(148, 255, 51 ));
+                                                        frameAire.setBackgroundColor(Color.rgb(226, 255, 200 ));
+                                                    }
+                                                    else if (imeca <= 100){
+                                                        aireAppbar.setBackgroundColor(Color.rgb(255, 230, 28 ));
+                                                        frameAire.setBackgroundColor(Color.rgb(255, 243, 146 ));
+                                                    }
+                                                    else if (imeca <= 150){
+                                                        aireAppbar.setBackgroundColor(Color.rgb(255, 141, 27 ));
+                                                        frameAire.setBackgroundColor(Color.rgb(255, 203, 152 ));
+                                                    }
+                                                    else if (imeca <= 200){
+                                                        aireAppbar.setBackgroundColor(Color.rgb(255, 37, 20 ));
+                                                        frameAire.setBackgroundColor(Color.rgb(255, 165, 158 ));
+                                                    }
+                                                    else if (imeca > 200){
+                                                        aireAppbar.setBackgroundColor(Color.rgb(158, 39, 255 ));
+                                                        frameAire.setBackgroundColor(Color.rgb(224, 185, 255 ));
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+                                            Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                } //termina circle.equals
+
+                                if (circle.equals(tlaquepaque)){
+                                    estacion.setText("Tlaquepaque");
+                                    mDatabase.child("Aire").child("Tlaquepaque").addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            if (dataSnapshot.exists()) {
+                                                //Toast.makeText(MainActivity.this, "Cambio", Toast.LENGTH_SHORT).show();
+                                                String IMECA = dataSnapshot.child("IMECA").getValue().toString();
+                                                numImeca.setText(IMECA);
+                                                String O3 = dataSnapshot.child("O3").getValue().toString();
+                                                o3.setText(O3);
+                                                String NO2 = dataSnapshot.child("NO2").getValue().toString();
+                                                no2.setText(NO2);
+                                                String CO = dataSnapshot.child("CO").getValue().toString();
+                                                co.setText(CO);
+                                                String SO2 = dataSnapshot.child("SO2").getValue().toString();
+                                                so2.setText(SO2);
+                                                String PM10 = dataSnapshot.child("PM10").getValue().toString();
+                                                pm10.setText(PM10);
+                                                String PM25 = dataSnapshot.child("PM25").getValue().toString();
+                                                pm25.setText(PM25);
+
+                                                if (!IMECA.equals("")){
+                                                    int imeca = Integer.parseInt(IMECA);
+                                                    if (imeca <= 50){
+                                                        aireAppbar.setBackgroundColor(Color.rgb(148, 255, 51 ));
+                                                        frameAire.setBackgroundColor(Color.rgb(226, 255, 200 ));
+                                                    }
+                                                    else if (imeca <= 100){
+                                                        aireAppbar.setBackgroundColor(Color.rgb(255, 230, 28 ));
+                                                        frameAire.setBackgroundColor(Color.rgb(255, 243, 146 ));
+                                                    }
+                                                    else if (imeca <= 150){
+                                                        aireAppbar.setBackgroundColor(Color.rgb(255, 141, 27 ));
+                                                        frameAire.setBackgroundColor(Color.rgb(255, 203, 152 ));
+                                                    }
+                                                    else if (imeca <= 200){
+                                                        aireAppbar.setBackgroundColor(Color.rgb(255, 37, 20 ));
+                                                        frameAire.setBackgroundColor(Color.rgb(255, 165, 158 ));
+                                                    }
+                                                    else if (imeca > 200){
+                                                        aireAppbar.setBackgroundColor(Color.rgb(158, 39, 255 ));
+                                                        frameAire.setBackgroundColor(Color.rgb(224, 185, 255 ));
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+                                            Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                } //termina circle.equals
+
+                                if (circle.equals(vallarta)){
+                                    estacion.setText("Vallarta");
+                                    mDatabase.child("Aire").child("Vallarta").addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            if (dataSnapshot.exists()) {
+                                                //Toast.makeText(MainActivity.this, "Cambio", Toast.LENGTH_SHORT).show();
+                                                String IMECA = dataSnapshot.child("IMECA").getValue().toString();
+                                                numImeca.setText(IMECA);
+                                                String O3 = dataSnapshot.child("O3").getValue().toString();
+                                                o3.setText(O3);
+                                                String NO2 = dataSnapshot.child("NO2").getValue().toString();
+                                                no2.setText(NO2);
+                                                String CO = dataSnapshot.child("CO").getValue().toString();
+                                                co.setText(CO);
+                                                String SO2 = dataSnapshot.child("SO2").getValue().toString();
+                                                so2.setText(SO2);
+                                                String PM10 = dataSnapshot.child("PM10").getValue().toString();
+                                                pm10.setText(PM10);
+                                                String PM25 = dataSnapshot.child("PM25").getValue().toString();
+                                                pm25.setText(PM25);
+
+                                                if (!IMECA.equals("")){
+                                                    int imeca = Integer.parseInt(IMECA);
+                                                    if (imeca <= 50){
+                                                        aireAppbar.setBackgroundColor(Color.rgb(148, 255, 51 ));
+                                                        frameAire.setBackgroundColor(Color.rgb(226, 255, 200 ));
+                                                    }
+                                                    else if (imeca <= 100){
+                                                        aireAppbar.setBackgroundColor(Color.rgb(255, 230, 28 ));
+                                                        frameAire.setBackgroundColor(Color.rgb(255, 243, 146 ));
+                                                    }
+                                                    else if (imeca <= 150){
+                                                        aireAppbar.setBackgroundColor(Color.rgb(255, 141, 27 ));
+                                                        frameAire.setBackgroundColor(Color.rgb(255, 203, 152 ));
+                                                    }
+                                                    else if (imeca <= 200){
+                                                        aireAppbar.setBackgroundColor(Color.rgb(255, 37, 20 ));
+                                                        frameAire.setBackgroundColor(Color.rgb(255, 165, 158 ));
+                                                    }
+                                                    else if (imeca > 200){
+                                                        aireAppbar.setBackgroundColor(Color.rgb(158, 39, 255 ));
+                                                        frameAire.setBackgroundColor(Color.rgb(224, 185, 255 ));
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+                                            Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                } //termina circle.equals
+
                             }
                         });
 
@@ -373,9 +1077,427 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             public void onCircleClick(@NonNull Circle circle) {
                                 dialogBuilder = new AlertDialog.Builder(MainActivity.this);
                                 final View popupView = getLayoutInflater().inflate(R.layout.popup_verde, null);
+
+                                verdeAppbar = (MaterialToolbar) popupView.findViewById(R.id.verdeAppbar);
+                                frameVerde = (RelativeLayout) popupView.findViewById(R.id.frameVerde);
+
+                                zonaVerde = (TextView) popupView.findViewById(R.id.zonaVerde);
+                                letraEstado = (TextView) popupView.findViewById(R.id.letraEstado);
+                                extension = (EditText) popupView.findViewById(R.id.et_extension);
+                                situacion = (EditText) popupView.findViewById(R.id.et_situacion);
+
                                 dialogBuilder.setView(popupView);
                                 dialog = dialogBuilder.create();
                                 dialog.show();
+
+                                if (circle.equals(barranca)) {
+                                    zonaVerde.setText("Barranca de Oblatos");
+                                    mDatabase.child("Agua").child("Barranca de Oblatos").addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            if (dataSnapshot.exists()) {
+                                                //Toast.makeText(MainActivity.this, "Cambio", Toast.LENGTH_SHORT).show();
+                                                String letra = dataSnapshot.child("Estado").getValue().toString();
+                                                letraEstado.setText(letra);
+                                                String ext = dataSnapshot.child("Extension").getValue().toString();
+                                                letraEstado.setText(ext);
+                                                String sit = dataSnapshot.child("Situacion").getValue().toString();
+                                                letraEstado.setText(sit);
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+                                            Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+
+                                } //termina circle.equals
+
+                                if (circle.equals(bPrimavera)) {
+                                    zonaVerde.setText("Bosque La Primavera");
+                                    mDatabase.child("Agua").child("Bosque La Primavera").addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            if (dataSnapshot.exists()) {
+                                                //Toast.makeText(MainActivity.this, "Cambio", Toast.LENGTH_SHORT).show();
+                                                String letra = dataSnapshot.child("Estado").getValue().toString();
+                                                letraEstado.setText(letra);
+                                                String ext = dataSnapshot.child("Extension").getValue().toString();
+                                                letraEstado.setText(ext);
+                                                String sit = dataSnapshot.child("Situacion").getValue().toString();
+                                                letraEstado.setText(sit);
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+                                            Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+
+                                } //termina circle.equals
+
+                                if (circle.equals(bColomos)) {
+                                    zonaVerde.setText("Bosque Los Colomos");
+                                    mDatabase.child("Agua").child("Bosque Los Colomos").addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            if (dataSnapshot.exists()) {
+                                                //Toast.makeText(MainActivity.this, "Cambio", Toast.LENGTH_SHORT).show();
+                                                String letra = dataSnapshot.child("Estado").getValue().toString();
+                                                letraEstado.setText(letra);
+                                                String ext = dataSnapshot.child("Extension").getValue().toString();
+                                                letraEstado.setText(ext);
+                                                String sit = dataSnapshot.child("Situacion").getValue().toString();
+                                                letraEstado.setText(sit);
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+                                            Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+
+                                } //termina circle.equals
+
+                                if (circle.equals(bCentinela)) {
+                                    zonaVerde.setText("Bosque El Centinela");
+                                    mDatabase.child("Agua").child("Bosque El Cemtinela").addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            if (dataSnapshot.exists()) {
+                                                //Toast.makeText(MainActivity.this, "Cambio", Toast.LENGTH_SHORT).show();
+                                                String letra = dataSnapshot.child("Estado").getValue().toString();
+                                                letraEstado.setText(letra);
+                                                String ext = dataSnapshot.child("Extension").getValue().toString();
+                                                letraEstado.setText(ext);
+                                                String sit = dataSnapshot.child("Situacion").getValue().toString();
+                                                letraEstado.setText(sit);
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+                                            Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+
+                                } //termina circle.equals
+
+                                if (circle.equals(cerroReina)) {
+                                    zonaVerde.setText("Cerro de la Reina");
+                                    mDatabase.child("Agua").child("Cerro de la Reina").addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            if (dataSnapshot.exists()) {
+                                                //Toast.makeText(MainActivity.this, "Cambio", Toast.LENGTH_SHORT).show();
+                                                String letra = dataSnapshot.child("Estado").getValue().toString();
+                                                letraEstado.setText(letra);
+                                                String ext = dataSnapshot.child("Extension").getValue().toString();
+                                                letraEstado.setText(ext);
+                                                String sit = dataSnapshot.child("Situacion").getValue().toString();
+                                                letraEstado.setText(sit);
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+                                            Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+
+                                } //termina circle.equals
+
+                                if (circle.equals(country)) {
+                                    zonaVerde.setText("Country Club");
+                                    mDatabase.child("Agua").child("Country CLub").addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            if (dataSnapshot.exists()) {
+                                                //Toast.makeText(MainActivity.this, "Cambio", Toast.LENGTH_SHORT).show();
+                                                String letra = dataSnapshot.child("Estado").getValue().toString();
+                                                letraEstado.setText(letra);
+                                                String ext = dataSnapshot.child("Extension").getValue().toString();
+                                                letraEstado.setText(ext);
+                                                String sit = dataSnapshot.child("Situacion").getValue().toString();
+                                                letraEstado.setText(sit);
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+                                            Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+
+                                } //termina circle.equals
+
+                                if (circle.equals(pAguaAzul)) {
+                                    zonaVerde.setText("Parque Agua Azul");
+                                    mDatabase.child("Agua").child("Parque Agua Azul").addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            if (dataSnapshot.exists()) {
+                                                //Toast.makeText(MainActivity.this, "Cambio", Toast.LENGTH_SHORT).show();
+                                                String letra = dataSnapshot.child("Estado").getValue().toString();
+                                                letraEstado.setText(letra);
+                                                String ext = dataSnapshot.child("Extension").getValue().toString();
+                                                letraEstado.setText(ext);
+                                                String sit = dataSnapshot.child("Situacion").getValue().toString();
+                                                letraEstado.setText(sit);
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+                                            Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+
+                                } //termina circle.equals
+
+                                if (circle.equals(pAlcalde)) {
+                                    zonaVerde.setText("Parque Alcalde");
+                                    mDatabase.child("Agua").child("Parque Alcalde").addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            if (dataSnapshot.exists()) {
+                                                //Toast.makeText(MainActivity.this, "Cambio", Toast.LENGTH_SHORT).show();
+                                                String letra = dataSnapshot.child("Estado").getValue().toString();
+                                                letraEstado.setText(letra);
+                                                String ext = dataSnapshot.child("Extension").getValue().toString();
+                                                letraEstado.setText(ext);
+                                                String sit = dataSnapshot.child("Situacion").getValue().toString();
+                                                letraEstado.setText(sit);
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+                                            Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+
+                                } //termina circle.equals
+
+                                if (circle.equals(pAvilaC)) {
+                                    zonaVerde.setText("Parque Ávila Camacho");
+                                    mDatabase.child("Agua").child("Parque Avila Camacho").addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            if (dataSnapshot.exists()) {
+                                                //Toast.makeText(MainActivity.this, "Cambio", Toast.LENGTH_SHORT).show();
+                                                String letra = dataSnapshot.child("Estado").getValue().toString();
+                                                letraEstado.setText(letra);
+                                                String ext = dataSnapshot.child("Extension").getValue().toString();
+                                                letraEstado.setText(ext);
+                                                String sit = dataSnapshot.child("Situacion").getValue().toString();
+                                                letraEstado.setText(sit);
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+                                            Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+
+                                } //termina circle.equals
+
+                                if (circle.equals(pGonzGallo)) {
+                                    zonaVerde.setText("Parque Gonzalez Gallo");
+                                    mDatabase.child("Agua").child("Parque Gonzalez Gallo").addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            if (dataSnapshot.exists()) {
+                                                //Toast.makeText(MainActivity.this, "Cambio", Toast.LENGTH_SHORT).show();
+                                                String letra = dataSnapshot.child("Estado").getValue().toString();
+                                                letraEstado.setText(letra);
+                                                String ext = dataSnapshot.child("Extension").getValue().toString();
+                                                letraEstado.setText(ext);
+                                                String sit = dataSnapshot.child("Situacion").getValue().toString();
+                                                letraEstado.setText(sit);
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+                                            Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+
+                                } //termina circle.equals
+
+                                if (circle.equals(pMetro)) {
+                                    zonaVerde.setText("Parque Metropolitano");
+                                    mDatabase.child("Agua").child("Parque Metropolitano").addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            if (dataSnapshot.exists()) {
+                                                //Toast.makeText(MainActivity.this, "Cambio", Toast.LENGTH_SHORT).show();
+                                                String letra = dataSnapshot.child("Estado").getValue().toString();
+                                                letraEstado.setText(letra);
+                                                String ext = dataSnapshot.child("Extension").getValue().toString();
+                                                letraEstado.setText(ext);
+                                                String sit = dataSnapshot.child("Situacion").getValue().toString();
+                                                letraEstado.setText(sit);
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+                                            Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+
+                                } //termina circle.equals
+
+                                if (circle.equals(pMontenegro)) {
+                                    zonaVerde.setText("Parque Montenegro");
+                                    mDatabase.child("Agua").child("Parque Montenegro").addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            if (dataSnapshot.exists()) {
+                                                //Toast.makeText(MainActivity.this, "Cambio", Toast.LENGTH_SHORT).show();
+                                                String letra = dataSnapshot.child("Estado").getValue().toString();
+                                                letraEstado.setText(letra);
+                                                String ext = dataSnapshot.child("Extension").getValue().toString();
+                                                letraEstado.setText(ext);
+                                                String sit = dataSnapshot.child("Situacion").getValue().toString();
+                                                letraEstado.setText(sit);
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+                                            Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+
+                                } //termina circle.equals
+
+                                if (circle.equals(pMorelos)) {
+                                    zonaVerde.setText("Parque Morelos");
+                                    mDatabase.child("Agua").child("Parque Morelos").addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            if (dataSnapshot.exists()) {
+                                                //Toast.makeText(MainActivity.this, "Cambio", Toast.LENGTH_SHORT).show();
+                                                String letra = dataSnapshot.child("Estado").getValue().toString();
+                                                letraEstado.setText(letra);
+                                                String ext = dataSnapshot.child("Extension").getValue().toString();
+                                                letraEstado.setText(ext);
+                                                String sit = dataSnapshot.child("Situacion").getValue().toString();
+                                                letraEstado.setText(sit);
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+                                            Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+
+                                } //termina circle.equals
+
+                                if (circle.equals(pSanJacinto)) {
+                                    zonaVerde.setText("Parque San Jacinto");
+                                    mDatabase.child("Agua").child("Parque San Jacinto").addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            if (dataSnapshot.exists()) {
+                                                //Toast.makeText(MainActivity.this, "Cambio", Toast.LENGTH_SHORT).show();
+                                                String letra = dataSnapshot.child("Estado").getValue().toString();
+                                                letraEstado.setText(letra);
+                                                String ext = dataSnapshot.child("Extension").getValue().toString();
+                                                letraEstado.setText(ext);
+                                                String sit = dataSnapshot.child("Situacion").getValue().toString();
+                                                letraEstado.setText(sit);
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+                                            Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+
+                                } //termina circle.equals
+
+                                if (circle.equals(pSanRafa)) {
+                                    zonaVerde.setText("Parque San Rafael");
+                                    mDatabase.child("Agua").child("Parque San Rafael").addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            if (dataSnapshot.exists()) {
+                                                //Toast.makeText(MainActivity.this, "Cambio", Toast.LENGTH_SHORT).show();
+                                                String letra = dataSnapshot.child("Estado").getValue().toString();
+                                                letraEstado.setText(letra);
+                                                String ext = dataSnapshot.child("Extension").getValue().toString();
+                                                letraEstado.setText(ext);
+                                                String sit = dataSnapshot.child("Situacion").getValue().toString();
+                                                letraEstado.setText(sit);
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+                                            Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+
+                                } //termina circle.equals
+
+                                if (circle.equals(pSoli)) {
+                                    zonaVerde.setText("Parque de la Solidaridad");
+                                    mDatabase.child("Agua").child("Parque de la Solidaridad").addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            if (dataSnapshot.exists()) {
+                                                //Toast.makeText(MainActivity.this, "Cambio", Toast.LENGTH_SHORT).show();
+                                                String letra = dataSnapshot.child("Estado").getValue().toString();
+                                                letraEstado.setText(letra);
+                                                String ext = dataSnapshot.child("Extension").getValue().toString();
+                                                letraEstado.setText(ext);
+                                                String sit = dataSnapshot.child("Situacion").getValue().toString();
+                                                letraEstado.setText(sit);
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+                                            Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+
+                                } //termina circle.equals
+
+                                if (circle.equals(zoo)) {
+                                    zonaVerde.setText("Zoologico de Guadalajara");
+                                    mDatabase.child("Agua").child("Zoologico de Gdl").addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            if (dataSnapshot.exists()) {
+                                                //Toast.makeText(MainActivity.this, "Cambio", Toast.LENGTH_SHORT).show();
+                                                String letra = dataSnapshot.child("Estado").getValue().toString();
+                                                letraEstado.setText(letra);
+                                                String ext = dataSnapshot.child("Extension").getValue().toString();
+                                                letraEstado.setText(ext);
+                                                String sit = dataSnapshot.child("Situacion").getValue().toString();
+                                                letraEstado.setText(sit);
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+                                            Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+
+                                } //termina circle.equals
+
                             }
                         });
 

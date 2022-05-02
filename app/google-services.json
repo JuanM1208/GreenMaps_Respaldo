@@ -8,43 +8,6 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:168012437174:android:8a419643316dea9c4b3817",
-        "android_client_info": {
-          "package_name": "com.example.greenmaps"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "168012437174-b8antjlkp5gq4jfjvhqnlthd7t2c50pg.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.greenmaps",
-            "certificate_hash": "cb7d67a12479affc2a7e26ec154f99f47d0bed57"
-          }
-        },
-        {
-          "client_id": "168012437174-nhl12bqen44nnr3uued0c2si985r13af.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyAWs4GHx4sy1mrlXtE--9jy_ZXd7Gjo_JU"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "168012437174-nhl12bqen44nnr3uued0c2si985r13af.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:168012437174:android:456de9fbb8c2f6d64b3817",
         "android_client_info": {
           "package_name": "com.example.greenmapsrespaldo"
