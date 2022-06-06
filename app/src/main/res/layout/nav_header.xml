@@ -9,33 +9,33 @@
         android:layout_height="50dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
-        android:src="@drawable/ic_baseline_account_circle_24"/>
+        android:src="@drawable/ic_baseline_account_circle_24" />
 
     <TextView
-        android:id="@+id/nombre"
+        android:id="@+id/nombre_menu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Aldo Lozano"
         android:layout_below="@+id/profilepic"
-        android:textColor="@color/black"
+        android:layout_marginLeft="16dp"
         android:layout_marginTop="10dp"
-        android:textStyle="bold"
+        android:text="Usuario"
+        android:textColor="@color/black"
         android:textSize="16dp"
-        android:layout_marginLeft="16dp"/>
+        android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/usuario"
+        android:id="@+id/usuario_menu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="a18300754@ceti.mx"
-        android:layout_below="@+id/nombre"
+        android:layout_below="@+id/nombre_menu"
+        android:layout_marginLeft="16dp"
+        android:text="usuario@gmail.com"
         android:textColor="@color/lightGray"
-        android:textSize="12dp"
-        android:layout_marginLeft="16dp"/>
+        android:textSize="12dp" />
 
     <View
-        android:layout_below="@+id/usuario"
+        style="@style/line"
         android:layout_width="match_parent"
-        style="@style/line"/>
+        android:layout_below="@+id/usuario_menu" />
 
 </RelativeLayout>

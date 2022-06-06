@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <item
+        android:id="@+id/menu_home"
+        android:icon="@drawable/ic_baseline_home_24"
+        android:title="Inicio"/>
+
+    <item android:title="Actualizar"
+        android:icon="@drawable/ic_baseline_refresh_24"
+        android:alphabeticShortcut="r"
+        android:id="@+id/menu_refresh"
+        app:showAsAction="ifRoom"/>
+
+    <item android:title="Configuración">
+
+        <menu>
+
+            <item android:title="Actualizar perfil"
+                android:id="@+id/menu_update_profile"
+                android:icon="@drawable/ic_user" />
+
+            <item android:title="Actualizar correo electrónico"
+                android:id="@+id/menu_update_email"
+                android:icon="@drawable/ic_email"/>
+
+            <item android:title="Cambiar contraseña"
+                android:id="@+id/menu_change_password"
+                android:icon="@drawable/ic_key"/>
+
+            <item android:title="Borrar perfil"
+                android:id="@+id/menu_delete_profile"
+                android:icon="@drawable/ic_delete"/>
+
+            <item android:title="Cerrar sesión"
+                android:id="@+id/menu_logout"
+                android:icon="@drawable/ic_off"/>
+
+        </menu>
+
+    </item>
+
+</menu>

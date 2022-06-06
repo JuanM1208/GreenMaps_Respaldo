@@ -27,6 +27,13 @@
         </activity>
         <activity android:name=".MainActivity" />
         <activity android:name=".Registro" />
+        <activity android:name=".ActualizarEmail" />
+        <activity android:name=".ActualizarPerfil" />
+        <activity android:name=".CambiarPassword" />
+        <activity android:name=".EliminarPerfil" />
+        <activity android:name=".PasswordOlvidada" />
+        <activity android:name=".PerfilUsuario" />
+        <activity android:name=".SubirFotoPerfil" />
 
         <meta-data
             android:name="com.google.android.gms.version"

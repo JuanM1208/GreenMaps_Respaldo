@@ -29,10 +29,9 @@
 
     <item android:title="Opciones">
         <menu>
-            <item
-                android:id="@+id/nav_info"
-                android:icon="@drawable/ic_baseline_info_24"
-                android:title="Acerca de"/>
+            <item android:title="Cerrar sesión"
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/ic_off"/>
 
             <item
                 android:id="@+id/nav_settings"

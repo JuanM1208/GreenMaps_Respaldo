@@ -52,7 +52,7 @@ public class Registro extends AppCompatActivity {
         String txtPassword = etPassword.getText().toString().trim();
         String txtConfirmPassword = etConfirmPassword.getText().toString();
 
-        String mobileRegex = "[6-9][0-9]{9}";
+        String mobileRegex = "[0-9][0-9]{9}";
         Matcher mobileMatcher;
         Pattern mobilePattern = Pattern.compile(mobileRegex);
         mobileMatcher = mobilePattern.matcher(txtPhone);
@@ -125,7 +125,7 @@ public class Registro extends AppCompatActivity {
                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                startActivity(intent);
            }else{
-               Toast.makeText(this, "El usuario no se a podido registrar", Toast.LENGTH_SHORT).show();
+               Toast.makeText(this, "El usuario no se ha podido registrar", Toast.LENGTH_SHORT).show();
            }
 
         }).addOnFailureListener(e -> Toast.makeText(this, "Error:" + e.getMessage(), Toast.LENGTH_LONG).show());

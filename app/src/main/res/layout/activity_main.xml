@@ -19,28 +19,28 @@
                 android:id="@+id/topAppbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:title="Green Maps"
+                android:background="@color/green"
                 app:navigationIcon="@drawable/ic_baseline_menu_24"
-                android:background="@color/green"/>
+                app:title="Green Maps" />
 
         </com.google.android.material.appbar.AppBarLayout>
 
         <fragment
+            android:id="@+id/map"
+            class="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/map"
-            tools:context=".MapsActivity"
-            class="com.google.android.gms.maps.SupportMapFragment" />
+            tools:context=".MapsActivity" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignEnd="@id/map"
             android:layout_alignTop="@id/map"
-            android:layout_marginRight="30px"
+            android:layout_alignEnd="@id/map"
             android:layout_marginTop="180px"
-            android:src="@drawable/ic_location"/>
+            android:layout_marginRight="30px"
+            android:src="@drawable/ic_location" />
 
     </RelativeLayout>
 
@@ -50,6 +50,6 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:headerLayout="@layout/nav_header"
-        app:menu="@menu/navigation_items"/>
+        app:menu="@menu/navigation_items" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

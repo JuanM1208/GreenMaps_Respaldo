@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,66 +8,99 @@
     tools:context=".PasswordOlvidada"
     android:background="@color/light_green">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="15dp"
-        android:padding="15dp"
-        android:background="@color/white">
+        android:orientation="vertical">
 
-        <TextView
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/topAppbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:title="Green Maps"
+                app:navigationIcon="@drawable/ic_baseline_menu_24"
+                android:background="@color/green"/>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Por favor, ingresa el correo electrónico que registraste para recibir el link de cambio de contraseña"
-            android:layout_marginTop="5dp"
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            android:id="@+id/textView_password_reset_head"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
+            android:layout_margin="15dp"
+            android:padding="15dp"
+            android:background="@color/white">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView_password_reset_email"
-            android:layout_below="@+id/textView_password_reset_head"
-            android:text="Correo electrónico*"
-            android:layout_marginTop="50dp"
-            android:textColor="@color/black"
-            android:padding="6dp"
-            android:textSize="16sp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Extravío de contraseña"
+                android:layout_marginTop="5dp"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:id="@+id/textView_password_reset_head"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                android:textStyle="bold"/>
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/editText_password_reset_email"
-            android:layout_below="@+id/textView_password_reset_email"
-            android:hint="Ingresa el correo electrónico registrado"
-            android:inputType="textEmailAddress"
-            android:padding="6dp"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            android:background="@drawable/border"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView_password_reset_email"
+                android:layout_below="@+id/textView_password_reset_head"
+                android:text="Correo electrónico*"
+                android:layout_marginTop="50dp"
+                android:textColor="@color/black"
+                android:padding="6dp"
+                android:textSize="16sp" />
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/button_password_reset"
-            android:layout_below="@+id/editText_password_reset_email"
-            android:layout_marginTop="50dp"
-            android:layout_marginLeft="70dp"
-            android:layout_marginRight="70dp"
-            android:text="CAMBIAR CONTRASEÑA"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/editText_password_reset_email"
+                android:layout_below="@+id/textView_password_reset_email"
+                android:hint="Ingresa el correo electrónico registrado"
+                android:inputType="textEmailAddress"
+                android:padding="6dp"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:background="@drawable/border"/>
 
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="?android:attr/progressBarStyleLarge"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:id="@+id/progressBar"
-            android:elevation="10dp"
-            android:visibility="gone"/>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/button_password_reset"
+                android:layout_below="@+id/editText_password_reset_email"
+                android:layout_marginTop="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:text="CAMBIAR CONTRASEÑA"
+                android:backgroundTint="@color/dark_green"/>
 
-    </RelativeLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtQuestion"
+                android:layout_below="@+id/button_password_reset"
+                android:layout_marginTop="10dp"
+                android:text="¿Aún no tienes cuenta?"
+                android:textSize="15dp"
+                android:textAlignment="center"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/button_register"
+                android:layout_below="@+id/txtQuestion"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:text="Regístrate"
+                android:backgroundTint="@color/dark_blue"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
 
 </ScrollView>

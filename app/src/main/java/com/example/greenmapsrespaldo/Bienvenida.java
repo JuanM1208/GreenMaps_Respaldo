@@ -1,5 +1,6 @@
 package com.example.greenmapsrespaldo;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,11 +13,13 @@ import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.util.Patterns;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -30,7 +33,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class Bienvenida extends AppCompatActivity {
 
     private EditText etLoginEmail, etLoginPassword;
-    private ProgressBar progressBar;
+    private TextView txtForgotPassword;
     private FirebaseAuth authProfile;
     private static final String TAG = "Login";
 
@@ -43,9 +46,19 @@ public class Bienvenida extends AppCompatActivity {
 
         etLoginEmail = findViewById(R.id.etLoginEmail);
         etLoginPassword = findViewById(R.id.etLoginPassword);
-        progressBar = findViewById(R.id.progressBar);
 
         authProfile = FirebaseAuth.getInstance();
+
+        txtForgotPassword = findViewById(R.id.txtForgotPassword);
+        txtForgotPassword.setClickable(true);
+        txtForgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(Bienvenida.this, "Ahora puedes cambiar tu contraseña", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(Bienvenida.this, PasswordOlvidada.class);
+                startActivity(intent);
+            }
+        });
 
         //Mostrar u ocultar contraseña con ícono de ojo
         ImageView imgPasswordVisibility = findViewById(R.id.imgPasswordVisibility);
@@ -90,7 +103,6 @@ public class Bienvenida extends AppCompatActivity {
                     etLoginPassword.requestFocus();
                 }
                 else {
-                    progressBar.setVisibility(View.VISIBLE);
                     loginUser(loginEmail, loginPassword);
                 }
             }
@@ -105,6 +117,31 @@ public class Bienvenida extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                AlertDialog.Builder builder = new AlertDialog.Builder(Bienvenida.this);
+                builder.setMessage("¿Desea salir de Green maps?")
+                        .setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                Intent intent = new Intent(Intent.ACTION_MAIN);
+                                intent.addCategory(Intent.CATEGORY_HOME);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                            }
+                        })
+                        .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                            }
+                        });
+                builder.show();
+            }
+        };
+        getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
     private void loginUser(String email, String password) {
@@ -112,20 +149,9 @@ public class Bienvenida extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
-                    //Obtener instancia del usuario actual
-                    FirebaseUser firebaseUser = authProfile.getCurrentUser();
-
-                    //Revisa si el email es verificado antes de que el usuario pueda acceder a su perfil
-                    //if (firebaseUser.isEmailVerified()){
                     Toast.makeText(Bienvenida.this, "Has iniciado sesión", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(Bienvenida.this, MainActivity.class));
                     finish();
-                    /*}
-                    else {
-                        firebaseUser.sendEmailVerification();
-                        authProfile.signOut();
-                        showAlertDialog();
-                    }*/
                 }
                 else {
                     try {
@@ -144,37 +170,11 @@ public class Bienvenida extends AppCompatActivity {
                         Toast.makeText(Bienvenida.this, "Ha ocurrido un error!", Toast.LENGTH_SHORT).show();
                     }
                 }
-                progressBar.setVisibility(View.GONE);
             }
         });
     }
 
-    /*private void showAlertDialog() {
-        //Coloca el Alert Builder
-        AlertDialog.Builder builder = new AlertDialog.Builder(Bienvenida.this);
-        builder.setTitle("Email no verificado");
-        builder.setMessage("Por favor verifica tu email en la bandeja de entrada. No puedes ingresar sin haber hecho este paso");
-
-        //Abrir app de email si el usuario acepta
-        builder.setPositiveButton("Continuar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(Intent.ACTION_MAIN);
-                intent.addCategory(Intent.CATEGORY_APP_EMAIL);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);     //Para que gmail abra en una nueva ventana
-                startActivity(intent);
-            }
-        });
-
-        //Crear el AlertDialog
-        AlertDialog alertDialog = builder.create();
-
-        //Mostrar el AlertDialog
-        alertDialog.show();
-    }*/
-
     //Revisa si el usuario ya había iniciado sesión, de ser el caso, lo lleva directamente a su perfil
-
     @Override
     protected void onStart() {
         super.onStart();

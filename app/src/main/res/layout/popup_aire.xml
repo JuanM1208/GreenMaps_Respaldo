@@ -52,6 +52,27 @@
                 android:padding="10dp"
                 android:layout_margin="10dp"/>
 
+            <TextView
+                android:id="@+id/updates"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/estacion"
+                android:text="Last Updated: "
+                android:textSize="10sp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="10dp"/>
+
+            <EditText
+                android:id="@+id/et_updates"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/estacion"
+                android:layout_toEndOf="@+id/updates"
+                android:text="-"
+                android:textSize="10sp"
+                android:padding="0dp"
+                android:background="@color/lightGray"/>
+
         </RelativeLayout>
 
     </com.google.android.material.appbar.MaterialToolbar>
